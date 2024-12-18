@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        .container{
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1{
+            text-align: center;
+            color: #333;
+        }
+
+        input{
+            padding: 10px;
+            width: 70%;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, -0, 0.3);
+        }
+        input:focus{
+            border-color: orange;
+        }
+        button{
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover{
+            background-color: #0056b3;
+        }
+
+        #movieDetails{
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #movieDetails img{
+            width: 200px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Finder</h1>
+
+        <input type="text" id="movieInput" placeholder="Enter Movie Name">
+        <button onclick="searchMovie()">Search</button>
+
+        <div id="movieDetails"></div>
+
+    </div>
+
+    <script>
+        const apiKey = "f2556c41";// Get an API key from https://www.omdbapi.com/
+
+        async function searchMovie() {
+        const movieName = document.getElementById("movieInput").value;
+        const url = `https://www.omdbapi.com/?t=${movieName}&apikey=${apiKey}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const movieDetails = document.getElementById("movieDetails");
+        movieDetails.innerHTML = `
+            <h2>${data.Title} (${data.Year})</h2>
+            <img src="${data.Poster}" alt="${data.Title}">
+            <h3>Actors: ${data.Actors}</h3>
+
+            <p>${data.Plot}</p>
+
+            <h4>Ratings: ${data.Ratings[0].Source} ${data.Ratings[0].Value},
+                ${data.Ratings[1].Source} ${data.Ratings[1].Value},
+                ${data.Ratings[2].Source} ${data.Ratings[2].Value}</h4>
+        `;
+        }
+
+    </script>
+</body>
+</html>

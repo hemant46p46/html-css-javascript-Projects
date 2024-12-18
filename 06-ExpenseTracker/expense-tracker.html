@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        input {
+            padding: 10px;
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #expenseList {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .deleteBtn{
+            background-color: red;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Tracker</h1>
+        <input type="text" id="expenseName" placeholder="Expense name">
+        <input type="number" id="expenseAmount" placeholder="Amount">
+        <button onclick="addExpense()">Add Expense</button>
+        <h2>Total: $<span id="totalAmount">0</span></h2>
+        <ul id="expenseList"></ul>
+      </div>
+
+    <script>
+        let totalAmount = 0;
+
+        function addExpense() {
+            const expenseName = document.getElementById("expenseName").value;
+            const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
+
+            if (expenseName === "" || isNaN(expenseAmount) || expenseAmount <= 0) {
+                alert("Please enter valid values.");
+                return;
+            }
+
+            totalAmount += expenseAmount;
+            document.getElementById("totalAmount").textContent = totalAmount.toFixed(2);
+
+            const expenseList = document.getElementById("expenseList");
+            const li = document.createElement("li");
+            li.innerHTML = `${expenseName}: $${expenseAmount.toFixed(2)} <button class="deleteBtn" onclick="removeExpense(this, ${expenseAmount})">Delete</button>`;
+            expenseList.appendChild(li);
+
+            document.getElementById("expenseName").value = "";
+            document.getElementById("expenseAmount").value = "";
+        }
+
+        function removeExpense(button, amount) {
+            totalAmount -= amount;
+            document.getElementById("totalAmount").textContent = totalAmount.toFixed(2);
+            button.parentElement.remove();
+        }
+
+    </script>
+</body>
+</html>

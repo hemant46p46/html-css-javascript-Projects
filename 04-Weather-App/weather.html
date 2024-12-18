@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container{
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+
+        input{
+            padding: 10px;
+            width: 200px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #getWeatherBtn{
+            border-radius: 5px;
+        }
+        button{
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background-color: #45a049;
+        }
+
+        #weatherData{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="cityInput" placeholder="Enter City">
+        <button onclick="getWeather()" id="getWeatherBtn">Get Weather</button>
+        <div id="weatherData">
+            <h2 id="cityName"></h2>
+            <p id="temperature"></p>
+            <p id="description"></p>
+        </div>
+    </div>
+
+
+    <script>
+        function getWeather(){
+            const city = document.getElementById("cityInput").value;
+            const apiKey = "ENTER_YOUR_API_KEY";// openweathermap api
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("cityName").textContent = data.name;
+                document.getElementById("temperature").textContent = `Temperature: ${data.main.temp}°C`;
+                document.getElementById("description").textContent = `Description: ${data.weather[0].description}`;
+            })
+            .catch(err => alert("City Not Found!"));
+        }
+    </script>
+</body>
+</html>

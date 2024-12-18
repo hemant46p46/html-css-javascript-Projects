@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+        }
+
+        .container{
+            width: 60%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input{
+            padding: 10px;
+            width: 60%;
+            margin: 10px 0;
+        }
+
+        button{
+            padding: 10px;
+            background-color: #007bff;
+            border:  none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover{
+            background-color: #0056b3;
+        }
+
+        #stockPrice{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Price Checker</h1>
+
+        <input type="text" id="stockSymbol" placeholder="Enter Stock symbol (eg AAPL)">
+        <button onclick="getStockPrice()">Get Stock Price</button>
+        <div id="stockPrice"></div>
+
+    </div>
+
+    <script>
+        const apiKey = "ID5QSFSCTGMGQ2HI";// Get your API key from https://www.alphavantage.co/
+
+        async function getStockPrice() {
+        const stockSymbol = document.getElementById("stockSymbol").value;
+        const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=1min&apikey=${apiKey}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data["Error Message"]) {
+            alert("Invalid stock symbol or error fetching data.");
+            return;
+        }
+
+        const stockPrice = data["Time Series (1min)"];
+        const latestTime = Object.keys(stockPrice)[0];
+        const price = stockPrice[latestTime]["1. open"];
+
+        const stockPriceElement = document.getElementById("stockPrice");
+        stockPriceElement.innerHTML = `
+            <h2>${stockSymbol.toUpperCase()}</h2>
+            <p>Price: $${price}</p>
+            <p>Time: ${latestTime}</p>
+        `;
+        }
+
+    </script>
+</body>
+</html>

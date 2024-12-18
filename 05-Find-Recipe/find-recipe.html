@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+        }
+        .container{
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 500px;/* modify */
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        input{
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        button{
+            padding: 10px;
+            background-color: #008cba;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover{
+            background-color: #005f72;
+        }
+        #recipeData{
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Finder</h1>
+        <input type="text" id="recipeInput" placeholder="Enter a recipe">
+        <button onclick="findRecipe()">Search</button>
+        <div id="recipeData"></div>
+    </div>
+
+    <script>
+        function findRecipe() {
+            const recipeInput = document.getElementById("recipeInput").value;
+            const apiKey = "3fa48edc1e0f455b8775dbe07aff7ec8";
+            const url = `https://api.spoonacular.com/recipes/complexSearch?query=${recipeInput}&apiKey=${apiKey}`;
+
+            fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const recipes = data.results;
+                const recipeData = document.getElementById("recipeData");
+                recipeData.innerHTML = "";
+
+                if (recipes.length === 0) {
+                    recipeData.innerHTML = "<p>No recipes found!</p>";
+                } else {
+                    recipes.forEach(element => {
+                        const recipeDiv = document.createElement("div");
+                        recipeDiv.innerHTML = `
+                            <h3>${element.title}</h3>
+                            <img src="${element.image}" alt="${element.title}" width="200"/>
+                            <a href="https://spoonacular.com/recipes/${element.title}-${element.id}" target="_blank">View Recipe</a>
+                        `;
+                        recipeData.appendChild(recipeDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                alert("Error fetching recipe data.");
+                console.error(error);
+            });
+        }
+    </script>
+</body>
+</html>

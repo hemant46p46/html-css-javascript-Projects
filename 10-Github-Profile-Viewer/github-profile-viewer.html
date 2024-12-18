@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container{
+            text-align: center;
+            padding: 20px;
+            background: white;
+            width: 80%;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        input{
+            padding: 10px;
+            width: 60%;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        button{
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background-color: #0056b3;
+        }
+
+        #profileData{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Github Profile</h1>
+
+        <input type="text" id="username" placeholder="Enter Github Username">
+        <button onclick="fetchProfile()">Get Profile</button>
+        <div id="profileData"></div>
+
+    </div>
+
+    <script>
+        async function fetchProfile() {
+            const username = document.getElementById("username").value;
+            const url = `https://api.github.com/users/${username}`;
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if(data.message === "Not Found"){
+                alert("User Not Found");
+                return;
+            }
+            const profileData = document.getElementById("profileData");
+            profileData.innerHTML = `
+                <h2>${data.name}</h2>
+                <img src="#{data.avatar_url}" alt="${data.login}" width="150">
+                <p><strong>Bio: </strong>${data.bio || "No bio available"}</p>
+                <p><strong>Followers: </strong>${data.followers}</p>
+                <p><strong>Public Repositories: </strong>${data.public_repos}</p>
+                <a href="${data.html_url}" target="_blank">View Profile</a>
+            `;
+        }
+
+    </script>
+</body>
+</html>

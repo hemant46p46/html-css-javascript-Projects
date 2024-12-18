@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        .container{
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button{
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            border-radius: 4px;
+        }
+
+        button:hover{
+            background-color: #0056b3;
+        }
+
+        #quiz{
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Trivia Quiz</h1>
+        <button onclick="startQuiz()">Start Quiz</button>
+        <div id="quiz"></div>
+
+    </div>
+
+    <button onclick="()=>{<p>Correct Answer: `${question.correct_answer}`</p>}">Show Answer</button>
+
+    <script>
+
+        async function startQuiz() {
+        const url = "https://opentdb.com/api.php?amount=5&type=multiple";
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const quizElement = document.getElementById("quiz");
+        quizElement.innerHTML = "";
+
+        data.results.forEach((question, index) => {
+            const questionElement = document.createElement("div");
+
+                // Dynamically create the question and answers
+                questionElement.innerHTML = `
+                    <h3>${question.question}</h3>
+                    <ul>
+                        ${question.incorrect_answers
+                            .concat(question.correct_answer)
+                            .map(answer => `<li>${answer}</li>`)
+                            .join("")}
+                    </ul>
+                    <button id="show-answer-${index}">Show Answer</button>
+                    <p id="answer-${index}" style="display: none;">Correct Answer: ${question.correct_answer}</p>
+                `;
+
+                // Append question to the quiz container
+                quizElement.appendChild(questionElement);
+
+                // Add event listener to the "Show Answer" button
+                const showAnswerButton = document.getElementById(`show-answer-${index}`);
+                const answerParagraph = document.getElementById(`answer-${index}`);
+
+                showAnswerButton.addEventListener("click", () => {
+                    answerParagraph.style.display = "block"; // Show the correct answer
+                });
+            });
+
+        }
+
+    </script>
+</body>
+</html>

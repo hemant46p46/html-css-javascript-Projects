@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container{
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        h1{
+            text-align: center;
+            color: #333;
+        }
+
+        ul{
+            list-style: none;
+            padding: 0;
+        }
+
+        li{
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        li img{
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        button{
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Latest News</h1>
+        <ul id="newsList"></ul>
+    </div>
+
+
+
+    <script>
+        const apiKey = "053ee5eee37844f09695453e7911ebec"; // Get an API key from https://newsapi.org/
+        const url = `
+https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${apiKey}`;
+
+        async function fetchNews() {
+        const response = await fetch(url);
+        const data = await response.json();
+        const articles = data.articles;
+
+        const newsList = document.getElementById("newsList");
+        articles.forEach(article => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+            <img src="${article.urlToImage}" alt="${article.title}">
+            <h3>${article.title}</h3>
+            <p>${article.description}</p>
+            <button onclick="window.open('${article.url}')">Read More</button>
+            `;
+            newsList.appendChild(li);
+        });
+        }
+
+        fetchNews();
+
+    </script>
+</body>
+</html>
