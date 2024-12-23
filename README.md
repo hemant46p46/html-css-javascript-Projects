@@ -1,0 +1,1 @@
+This Repository contains such projects which are developed using html, css, javascript only. Some of these project api is used, with 3rd party api, may be api key will be different in future, in such case You can create your on account and get free api key, cause all api which is used in project is free.
